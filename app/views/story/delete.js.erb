@@ -1,0 +1,9 @@
+$('.btn-remove-story').unbind('ajax:success')
+$('.btn-remove-story').bind('ajax:success', function() {
+  var items = $(this).parents('.items');
+  items.fadeOut(function() {
+    items.remove()
+  });
+
+  $('#analytics').html('<%= escape_javascript(render partial: 'project/analytics') %>')
+})

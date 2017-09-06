@@ -1,0 +1,6 @@
+$('.task-create-form').unbind('ajax:success');
+$('.task-create-form').bind('ajax:success', function() {
+  var parent = $(this).parents('.task-block');
+  $(this).find('input').val('');
+  parent.find('.tasks-table tbody').append('<%= escape_javascript(render partial: 'project/task', locals: {task: @task, story: @story}) %>');
+})

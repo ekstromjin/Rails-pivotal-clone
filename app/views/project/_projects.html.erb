@@ -1,0 +1,6 @@
+<div class="projects">
+  <% @projects.each do |project| %>
+      <%= render partial: 'project/project', locals: {project: project} %>
+  <% end %>
+</div>
+<center><%= ajax_will_paginate @projects %></center>

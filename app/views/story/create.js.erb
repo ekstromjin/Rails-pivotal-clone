@@ -1,0 +1,12 @@
+$('.story-create-form').unbind('ajax:success')
+$('.story-create-form').bind('ajax:success', function() {
+  $('#addstory').modal('hide');
+  $('.text-required').val('');
+  $('#story_story_type').val('0');
+  $('.panel.current > .items-container').append('<%= escape_javascript(render :partial => "project/story", :locals => {story: @story}) %>');
+
+  handleStorySelect2();
+  $('.sidebar-content').html('<%= escape_javascript(render partial: 'project/sidebar') %>')
+
+  $('#analytics').html('<%= escape_javascript(render partial: 'project/analytics') %>')
+});

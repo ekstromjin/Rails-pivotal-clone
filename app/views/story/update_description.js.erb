@@ -1,0 +1,7 @@
+$('.update-story-description-form').unbind('ajax:success')
+$('.update-story-description-form').bind('ajax:success', function() {
+  var form_action = $(this).find('.form-action')
+  var original_input = $(this).find('.original-value');
+  form_action.removeClass('edit')
+  original_input.val('<%= @story[:description] %>')
+})

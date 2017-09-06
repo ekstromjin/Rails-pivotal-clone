@@ -1,0 +1,13 @@
+$('.project-create-form').unbind('ajax:success')
+$('.project-create-form').bind('ajax:success', function() {
+  $('#addModal').modal('hide');
+  if ($('tr').hasClass('blank-project'))
+    $('.blank-project').remove();
+
+  $('.projects').prepend('<%= escape_javascript(render partial: 'project', locals: {project: @project}) %>')
+
+  $('.project-create-form input').val('');
+  $('.project-create-form #project_security').val('0');
+  $('.project-create-form #project_members').val('');
+  $('.members').hide();
+});

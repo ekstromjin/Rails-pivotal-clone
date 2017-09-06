@@ -1,0 +1,22 @@
+$('.update-story-form').unbind('ajax:success')
+$('.update-story-form').bind('ajax:success', function() {
+  var parent = $(this).parents('.items');
+  var header = parent.find('.items-header');
+  var story_type = <%= @story[:story_type] %>;
+  if (story_type == 0)
+    header.find('.story_type').empty();
+  else
+    header.find('.story_type').html('<i class="fa fa-star"></i>');
+  header.find('.title').html('<%= @story[:title] %>')
+  <% if @story.users.present? %>
+    header.find('.owner').html('<%= @story.getOwnerNames %>')
+  <% else %>
+    header.find('.owner').html('None')
+  <% end %>
+  header.find('.points').html(<%= @story[:points] %>)
+  $('#analytics').html('<%= escape_javascript(render partial: 'project/analytics') %>')
+  if (temp_award_story != <%= @project.stories(true).getUnestimatedStories.length %>)
+  {
+    $('#ratings').html('<%= escape_javascript(render partial: 'project/awards') %>')
+  }
+})

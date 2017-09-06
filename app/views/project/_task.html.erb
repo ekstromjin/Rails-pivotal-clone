@@ -1,0 +1,8 @@
+<% isDisableStatus = !story.users.where(id: session[:user_id]).present? %>
+<tr data-task-id="<%= task[:id] %>">
+  <td class="task-status-value"><%= check_box_tag 'task[status]', task[:status], task[:status] == 1, class: 'task-status', disabled: isDisableStatus %></td>
+  <td><%= task[:title] %></td>
+  <% if story[:status] != 4 %>
+    <td class="task-action-value"><%= link_to '<i class="fa fa-trash-o"></i>'.html_safe, {action: 'delete', controller: 'task', id: task[:id]}, class: 'btn-delete-task', remote: true %></td>
+  <% end %>
+</tr>

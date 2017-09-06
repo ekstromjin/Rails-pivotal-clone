@@ -1,0 +1,31 @@
+<center>Story <%= @story[:title] %>'status has been changed</center>
+<table>
+  <tbody>
+  <tr>
+    <td>Project</td>
+    <td><%= link_to @story.project[:title], {:action => 'show', :controller => 'project', :id => @story.project[:id]} %></td>
+  </tr>
+  <tr>
+    <td>Story</td>
+    <td><%= link_to @story[:id], {:action => 'show', :controller => 'project', :id => @story.project[:id], :story_id => @story[:id]} %></td>
+  </tr>
+  <tr>
+    <td>Owners</td>
+    <td><%= @story.getOwnerFullnames %></td>
+  </tr>
+  <tr>
+    <td>Action Status</td>
+    <td>
+      <% if @story[:status] == 1 %>
+        Start
+      <% elsif @story[:status] == 2 %>
+        Test
+      <% elsif @story[:status] == 3 %>
+        Backlog
+      <% elsif @story[:status] == 4 %>
+        Done
+      <% end %>
+    </td>
+  </tr>
+  </tbody>
+</table>

@@ -1,0 +1,199 @@
+<div class="items" id="story-<%= story[:id] %>">
+  <div class="items-header">
+    <div class="story-action-block">
+      <span class="story-collapse"><i class="fa <%= @expand_story == story[:id] ? 'fa-minus' : 'fa-plus' %>"></i></span>
+      <span class="story_type text-orange-300"><% if story[:story_type] == 1 %><i class="fa fa-star"></i><% end %></span>
+      <span class="story_id"><%= story[:id] %></span>
+      <span class="story_action pull-right">
+        <% if session[:isAdmin] %>
+          <% if story.status == 2 %>
+              <%= link_to 'Accept', {action: 'change_status', :controller => 'story', status: 4, id: story.id, project_id: @project.id}, method: 'post', remote: true, class: 'btn btn-default btn-action' %>
+              <%= link_to 'Reject', {action: 'change_status', :controller => 'story', status: 3, id: story.id, project_id: @project.id}, method: 'post', remote: true, class: 'btn btn-default btn-action' %>
+          <% end %>
+        <% else %>
+          <% if story.status == 0 && story.getOwnerIds.include?(session[:user_id]) %>
+            <%= link_to 'Start', {action: 'change_status', :controller => 'story', status: 1, id: story.id, project_id: @project.id}, method: 'post', remote: true, class: 'btn btn-default btn-action' %>
+          <% elsif story.status == 1 && story.getOwnerIds.include?(session[:user_id]) && story.isTasksComplete %>
+            <%= link_to 'Finish', {action: 'change_status', :controller => 'story', status: 2, id: story.id, project_id: @project.id}, method: 'post', remote: true, class: 'btn btn-default btn-action' %>
+          <% elsif story.status == 3 && story.getOwnerIds.include?(session[:user_id]) %>
+            <%= link_to 'Start', {action: 'change_status', :controller => 'story', status: 1, id: story.id, project_id: @project.id}, method: 'post', remote: true, class: 'btn btn-default btn-action' %>
+          <% end %>
+        <% end %>
+      </span>
+    </div>
+      <div class="story-info-section" <% if @expand_story == story[:id] %>style="display: none"<% end %>>
+        <div class="story-title-block">
+          <span class="story-title text-info"><%= story[:title] %></span>
+        </div>
+        <div class="story-owner-block">
+          <div class="pull-left">
+            <span class="owner text-orange-300">
+              <i class="fa fa-user"></i>&nbsp;
+              <% if story.users.present? %>
+                <%= story.getOwnerNames %>
+              <% else %>
+                None
+              <% end %>
+            </span>
+          </div>
+          <div class="pull-right">
+            <label class="text-warning-300">Pts : <span class="points text-danger-300"><%= story[:points] == 0 ? 'Unestimated' : story[:points] %></span></label>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="items-content <%= @expand_story == story[:id] ? 'expand' : '' %>">
+    <% if session[:isAdmin] && story.status != 4 %>
+        <%= form_tag({:action => 'update_title', :controller => 'story'}, remote: true, class: 'update-story-title-form') do %>
+            <%= hidden_field 'story', 'id', :value => story[:id] %>
+            <%= hidden_field_tag 'original-title', story[:title], :class => 'original-value' %>
+            <label class="story-field">Title</label>
+            <div class="form-action">
+              <%= link_to "<i class='fa fa-pencil-square text-grey-700'></i>".html_safe, {}, class: 'btn-edit icon-btn pull-right' %>
+              <%= link_to "<i class='fa fa-ban text-grey-700'></i>".html_safe, {}, class: 'btn-cancel icon-btn pull-right' %>
+              <%= link_to "<i class='fa fa-check-square text-grey-700'></i>".html_safe, {}, class: 'btn-submit icon-btn pull-right' %>
+            </div>
+            <div class="story-title">
+              <%= text_field 'story', 'title', :class => 'form-control text-required', :value => story[:title], :readonly => true %>
+              <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i>You must filled title</span>
+            </div>
+        <% end %>
+        <div class="story-id">
+          <ul class="list-inline list-unstyled">
+            <li><i class="fa fa-link"></i></li>
+            <li>ID</li>
+            <li><%= story[:id] %></li>
+            <li><%= link_to "<i class='fa fa-trash-o'></i>".html_safe, {:action => 'delete', :controller => 'story', :id => story[:id]}, class: 'btn-remove-story', remote: true, data: {confirm: 'Are you sure?'} %></li>
+          </ul>
+        </div>
+        <%= form_tag({:action => 'update', :controller => 'story'}, remote: true, class: 'update-story-form') do %>
+          <%= hidden_field 'story', 'story_id', :value => story[:id] %>
+          <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i>You must filled all fields</span>
+          <div class="story-info-table">
+            <table class="table table-condensed table-responsive">
+              <tr>
+                <td class="story-field">Story type</td>
+                <td class="story-value"><%= select 'story', 'story_type', options_for_select([['Normal', 0], ['Feature', 1]], story[:story_type]), {}, :class => 'auto-save' %></td>
+              </tr>
+              <tr>
+                <td class="story-field">Points</td>
+                <td class="story-value"><%= select 'story', 'points', options_for_select([['Unestimated', 0],1,2,3,4,5,6,7,8], story[:points]), {}, :class => 'auto-save' %></td>
+              </tr>
+              <tr>
+                <td class="story-field">Requester</td>
+                <td class="story-value"><%= User.getAdmin[:email] %></td>
+              </tr>
+              <tr>
+                <td class="story-field">Owner</td>
+                <td class="story-value">
+                  <%= hidden_field 'story', 'members', :class =>'select2 auto-save story-members', :placeholder => 'None', :value => story.getOwnerIds.join(',') %>
+                </td>
+              </tr>
+            </table>
+          </div>
+        <% end %>
+        <%= form_tag({:action => 'update_description', :controller => 'story'}, remote: true, class: 'update-story-description-form') do %>
+            <%= hidden_field 'story', 'id', :value => story[:id] %>
+            <%= hidden_field_tag 'original-description', story[:description ], :class => 'original-value' %>
+            <div class="story-description">
+              <div class="form-action">
+                <%= link_to "<i class='fa fa-pencil-square text-grey-700'></i>".html_safe, {}, class: 'btn-edit icon-btn pull-right' %>
+                <%= link_to "<i class='fa fa-ban text-grey-700'></i>".html_safe, {}, class: 'btn-cancel icon-btn pull-right' %>
+                <%= link_to "<i class='fa fa-check-square text-grey-700'></i>".html_safe, {}, class: 'btn-submit icon-btn pull-right' %>
+              </div>
+              <label class="story-field">Description</label>
+              <%= text_area 'story', 'description', :class => 'form-control text-required', :value => story[:description], :rows => 3, :readonly => true %>
+              <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i>You must filled description</span>
+            </div>
+        <% end %>
+    <% else %>
+        <div class="story-title">
+          <label class="story-field">Title : </label>
+          <span class="story-value"><%= story[:title] %></span>
+        </div>
+        <div class="story-info-table">
+          <table class="table table-condensed table-responsive">
+            <tr>
+              <td class="story-field">Story type</td>
+              <td class="story-value">
+                <% if story[:story_type] == 0 %>
+                    Normal
+                <% else %>
+                    Feature
+                <% end %>
+              </td>
+            </tr>
+            <tr>
+              <td class="story-field">Points</td>
+              <td class="story-value"><%= story[:points] %></td>
+            </tr>
+            <tr>
+              <td class="story-field">Requester</td>
+              <td class="story-value"><%= User.getAdmin[:email] %></td>
+            </tr>
+            <tr>
+              <td class="story-field">Owner</td>
+              <td class="story-value">
+                <% if story.users.present? %>
+                    <%= story.getOwnerNames %>
+                <% else %>
+                    None
+                <% end %>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="story-description">
+          <label class="story-field">Description :</label>
+          <p class="story-value"><%= story[:description] %></p>
+        </div>
+    <% end %>
+    <div class="story-tasks-container">
+      <label class="story-field">Tasks</label>
+      <div class="task-block">
+        <%= form_tag({:action => 'create', :controller => 'task'}, remote: true, class: 'task-create-form') do %>
+            <%= hidden_field 'task', 'story_id', value: story[:id] %>
+            <%= text_field 'task', 'title', :class => 'form-control', :placeholder => 'Add a task' %>
+            <% if story[:status] != 4 %>
+              <%= button_tag 'Add', class: 'bg-grey-700 btn submit'%>
+            <% end %>
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i>Task field must filled.</span>
+        <% end %>
+        <div class="story-tasks">
+          <table class="table table-condensed table-responsive tasks-table">
+            <thead>
+            <tr>
+              <th class="task-status">Status</th>
+              <th class="task-title">Title</th>
+              <% if story[:status] != 4 %>
+                <th class="task-delete">Action</th>
+              <% end %>
+            </tr>
+            </thead>
+            <tbody>
+            <% story.tasks.each do |task| %>
+              <%= render partial: 'project/task', locals: {task: task, story: story} %>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="story-comments-container">
+      <label class="story-field">Activity</label>
+      <div class="comment-block">
+        <%= form_tag({:action => 'create', :controller => 'comment'}, remote: true, class: 'comment-create-form') do %>
+            <%= hidden_field 'comment', 'story_id', value: story[:id] %>
+            <%= text_area 'comment', 'comment', :class => 'form-control comment-comment', :placeholder => 'Add a comment' %>
+            <%= button_tag 'Add', class: 'bg-grey-700 btn submit'%>
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i>Comment field must filled.</span>
+        <% end %>
+        <div class="story-comments">
+          <% story.comments.each do |comment| %>
+            <%= render partial: 'project/comment', locals: {comment: comment} %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

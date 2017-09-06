@@ -1,0 +1,111 @@
+// Place all the styles related to the Auth controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.login-container .page-container {
+  padding-top: 40px;
+  .login-form, .registration-form {
+  	width: 320px;
+  	.thumb {
+  		margin: 0 auto 20px auto;	
+  	}
+  }
+}
+.login-container .page-container .login-form,
+.login-container .page-container .registration-form {
+  margin: 0 auto 20px auto;
+}
+@media (max-width: 480px) {
+  .login-container .page-container .login-form,
+  .login-container .page-container .registration-form {
+    width: 100%;
+  }
+}
+.login-container .page-container .login-form .remote,
+.login-container .page-container .registration-form .remote {
+  display: none;
+}
+.form-group .help-block {
+	display: none
+}
+.form-group.validate-error .help-block.validate-error {
+  display: block;
+}
+.form-group.require .help-block.require {
+	display: block
+}
+.form-group.exist .help-block.exist {
+	display: block
+}
+.form-group.confirmation .help-block.confirmation {
+	display: block
+}
+
+.user-detail {
+  .nav-tabs li {
+    &:not(.active) {
+      a{
+        background: rgba(0, 0, 0, .1)
+      }
+    }
+    a {
+      text-transform: capitalize;
+    }
+  }
+  .tab-content {
+    padding: 15px 0;
+    background-color: #fff;
+    border-left: 1px solid #ddd;
+    #tab-overview {
+      .member-name {
+        text-transform: capitalize;
+      }
+      .member-info >div {
+        height: 40px;
+      }
+    }
+    #tab-projects {
+      .project {
+        margin-bottom: 20px;
+        padding: 0 15px;
+        .inline-block {
+          display: inline-block;
+        }
+        .project-image {
+          width: 100px;
+          height: auto;
+        }
+        .project-info {
+          width: calc(100% - 105px);
+          padding: 0 15px;
+          vertical-align: middle;
+        }
+        .project-title {
+          text-transform: capitalize;
+        }
+        .project-status {
+          padding: 4px 8px;
+          background-color: #454545;
+          color: #fff;
+          border-radius: 10px;
+          text-transform: capitalize;
+          &.done {
+            background-color: #E91E63;
+            color: #fff;
+          }
+        }
+      }
+    }
+    img {
+      width: 100%;
+      height: auto;
+    }
+    label {
+      font-size: 16px;
+      line-height: 25px;
+    }
+    span {
+      font-size: 16px;
+    }
+  }
+}

@@ -1,0 +1,25 @@
+<div class="detail-page">
+  <%= render partial: 'layouts/header' %>
+  <div class="tab-content">
+    <div id="stories" class="tab-pane fade in active">
+      <%= render partial: 'stories' %>
+    </div>
+    <div id="analytics" class="tab-pane fade">
+      <%= render partial: 'analytics' %>
+    </div>
+    <% if session[:isAdmin] %>
+      <div id="settings" class="tab-pane fade">
+        <%= render partial: 'settings' %>
+      </div>
+    <% end %>
+    <div id="members" class="tab-pane fade">
+      <%= render partial: 'members' %>
+    </div>
+    <div  id="ratings" class="tab-pane fade">
+      <%= render partial: 'awards' %>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var temp_award_story = <%= @project.stories(true).getUnestimatedStories.length %>;
+</script>

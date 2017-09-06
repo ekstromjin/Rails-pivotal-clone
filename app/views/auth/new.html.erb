@@ -1,0 +1,98 @@
+<div class="page-container">
+  <div class="content-wrapper">
+    <%= form_tag({:action => 'signup'}, :remote => true, :multipart => true, :class => 'registration-form', :authenticity_token => true) do %>
+        <div class="panel panel-body">
+          <div class="text-center">
+            <div class="icon-object border-success text-success"><i class="icon-plus3"></i></div>
+            <h5 class="content-group">Create account <small class="display-block">All fields are required</small></h5>
+          </div>
+          <div class="remote">
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> User is already exist </span>
+          </div>
+          <div class="content-divider text-muted form-group"><span>Your credentials</span></div>
+          <center class="form-group has-feedback has-feedback-left image-container  ">
+            <div class="fileupload fileupload-new" data-provides="fileupload">
+              <div class="fileupload-new thumbnail" style="width: 150px; min-height: 150px;">
+                <%= image_tag(asset_path('assets/images/avatar_default.gif'), size: '150x150') %>
+              </div>
+              <div class="fileupload-preview fileupload-exists thumbnail" style="width: 150px; height: 150px; line-height: 20px;">
+              </div>
+              <div>
+                <span class="btn default btn-file bg-pink">
+                  <span class="fileupload-new">
+                    <i class="fa fa-paper-clip"></i> Select image
+                  </span>
+                  <span class="fileupload-exists">
+                    <i class="fa fa-undo"></i> Change
+                  </span>
+                  <%= file_field "user", "avatar_url", class: 'form-control' %>
+                </span>
+                <a href="#" class="btn red fileupload-exists bg-warning" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Remove</a>
+              </div>
+            </div>
+          </center>
+          <div class="form-group has-feedback has-feedback-left">
+            <%= text_field 'user', 'firstname', class: 'form-control text-required', placeholder: 'First name' %>
+            <div class="form-control-feedback">
+              <i class="icon-user-lock text-muted"></i>
+            </div>
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> Firstname is empty</span>
+          </div>
+          <div class="form-group has-feedback has-feedback-left">
+            <%= text_field 'user', 'lastname', class: 'form-control text-required', placeholder: 'Last name' %>
+            <div class="form-control-feedback">
+              <i class="icon-user-lock text-muted"></i>
+            </div>
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> Lastname is empty</span>
+          </div>
+          <div class="form-group has-feedback has-feedback-left">
+            <%= email_field 'user', 'email', class: 'form-control text-required', placeholder: 'Your email' %>
+            <div class="form-control-feedback">
+              <i class="icon-mention text-muted"></i>
+            </div>
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> Email is empty</span>
+            <span class="help-block text-danger validate-error"><i class="icon-cancel-circle2 position-left"></i> Email is not validate</span>
+          </div>
+          <div class="form-group has-feedback has-feedback-left gender-group" >
+            <%= collection_radio_buttons :user, :gender, [[0, 'Male'], [1, 'Female']], :first, :last, :item_wrapper_class => 'radio_buttons', :checked => 0 %>
+          </div>
+          <div class="form-group has-feedback has-feedback-left" >
+            <%= text_field 'user', 'birthdate', class: 'form-control form-control-inline input-medium date-picker text-required',:data => {'date-format' => 'yyyy-mm-dd'}, placeholder: 'Birthdate' %>
+            <div class="form-control-feedback">
+              <i class="icon-mention text-muted"></i>
+            </div>
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> Birthdate is empty</span>
+          </div>
+          <div class="form-group has-feedback has-feedback-left">
+            <%= password_field 'user', 'password_string', class: 'form-control text-required password', placeholder: 'Create password' %>
+            <div class="form-control-feedback">
+              <i class="icon-user-lock text-muted"></i>
+            </div>
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> Password is empty</span>
+          </div>
+          <div class="form-group has-feedback has-feedback-left">
+            <%= password_field 'user', 'password_confirmation', class: 'form-control text-required password_confirmation', placeholder: 'Password Confirmation' %>
+            <div class="form-control-feedback">
+              <i class="icon-user-check text-muted"></i>
+            </div>
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> Password confirmation is empty</span>
+            <span class="help-block text-danger confirmation"><i class="icon-cancel-circle2 position-left"></i> Password confirmation doesnt match</span>
+          </div>
+          <div class="form-group">
+            <%= button_tag "Register <i class='icon-circle-right2 position-right'></i>".html_safe ,type: 'submit', class: 'btn bg-pink-400 btn-block btn-lg submit' %>
+          </div>
+          <div class="content-divider text-muted form-group"><span>or login in with</span></div>
+          <ul class="list-inline form-group list-inline-condensed text-center">
+            <li><a href="#" class="btn border-indigo text-indigo btn-flat btn-icon btn-rounded"><i class="icon-facebook"></i></a></li>
+            <li><a href="#" class="btn border-pink-300 text-pink-300 btn-flat btn-icon btn-rounded"><i class="icon-dribbble3"></i></a></li>
+            <li><a href="#" class="btn border-slate-600 text-slate-600 btn-flat btn-icon btn-rounded"><i class="icon-github"></i></a></li>
+            <li><a href="#" class="btn border-info text-info btn-flat btn-icon btn-rounded"><i class="icon-twitter"></i></a></li>
+          </ul>
+          <div class="content-divider text-muted form-group"><span>Have an account?</span></div>
+
+          <%= link_to 'Login', {:action => 'login'}, :class => 'btn btn-default btn-block content-group' %>
+
+        </div>
+    <% end %>
+  </div>
+</div>

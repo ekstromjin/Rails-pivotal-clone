@@ -1,0 +1,8 @@
+$('.registration-form').unbind('ajax:success')
+$('.registration-form').bind('ajax:success', function() {
+  <% if @user[:id].blank? %>
+  $(this).find('.remote').show()
+  <% else %>
+  location.href = "<%= root_url %>"
+  <% end %>
+});

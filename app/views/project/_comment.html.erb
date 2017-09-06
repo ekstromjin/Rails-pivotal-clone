@@ -1,0 +1,13 @@
+<div class="story-comment" data-comment-id="<%= comment[:id] %>">
+  <div style="overflow: hidden">
+    <div class="pull-left">
+      <span class="comment-user"><%= comment.user.short_name %></span>
+    </div>
+    <div class="pull-right">
+      <span><%= comment[:created_at].strftime("%b %d %Y") %></span>
+    </div>
+  </div>
+  <div>
+    <span><%= comment[:comment] %></span>
+  </div>
+</div>

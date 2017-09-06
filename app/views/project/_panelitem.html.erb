@@ -1,0 +1,19 @@
+<li class="item <%= po["panel_type"] %> <%= po["is_visible"] == true ? 'visible' : '' %>">
+  <%
+    if po["panel_type"] == 'my_work'
+      @selected_stories = @project.getMyworkStories(session)
+    elsif po["panel_type"] == 'current'
+      @selected_stories = @project.getCurrentStories(session)
+    elsif po["panel_type"] == 'backlog'
+      @selected_stories = @project.getBacklogStories
+    elsif po["panel_type"] == 'test'
+      @selected_stories = @project.getTestStories
+    elsif po["panel_type"] == 'done'
+      @selected_stories = @project.getDoneStories
+    end
+  %>
+  <div class="counter"><%= @selected_stories.length %></div>
+  <a class="panel-toggle" data-panel-type="<%= po["panel_type"] %>">
+    <span class="panel-name"><%= po["panel_type"].gsub('_', ' ') %></span>
+  </a>
+</li>

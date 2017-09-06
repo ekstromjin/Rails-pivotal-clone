@@ -1,0 +1,66 @@
+<div class="analytics-container">
+  <div class="col-sm-6">
+    <div id="chartdiv" style="width: 100%; height: 300px;"></div>
+  </div>
+  <div class="col-sm-6">
+    <h2 class="text-center">Project Information</h2>
+    <table class="table table-condensed table-responsive">
+      <thead>
+      <tr>
+        <th>User</th>
+        <th>Processing</th>
+        <th>Before start</th>
+        <th>Done</th>
+        <th>Done Points</th>
+      </tr>
+      </thead>
+      <tbody>
+        <% @project_members = User.getSortingMembers(@project[:id]) %>
+        <% @project_members.each do |member| %>
+            <tr>
+              <td><%= member.full_name.capitalize %></td>
+              <td><%= member.get_processing_project_stories(@project[:id]).length %></td>
+              <td><%= member.get_beforestart_project_stories(@project[:id]).length %></td>
+              <td><%= member.get_done_project_stories(@project[:id]).length %></td>
+              <td><%= member.get_done_project_stories(@project[:id]).sum('points') %></td>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script type="text/javascript">
+  var chart;
+  var drawChart = function() {
+    var legend;
+
+    var chartData = [];
+
+    chartData.push({story_type: 'Processing', count: <%= @project.getProcessingStories.length %>});
+    chartData.push({story_type: 'Done', count: <%= @project.getDoneStories.length %>});
+    chartData.push({story_type: 'Before start', count: <%= @project.getBeforeBeginStories.length %>});
+
+    // PIE CHART
+    chart = new AmCharts.AmPieChart();
+    chart.dataProvider = chartData;
+    chart.titleField = "story_type";
+    chart.valueField = "count";
+    chart.outlineColor = "#FFFFFF";
+    chart.outlineAlpha = 0.8;
+    chart.outlineThickness = 2;
+    // this makes the chart 3D
+    chart.depth3D = 15;
+    chart.angle = 30;
+
+    // LEGEND
+    legend = new AmCharts.AmLegend();
+    legend.align = 'center';
+    legend.markerType = 'circle';
+    chart.addLegend(legend);
+
+    // WRITE
+    chart.write("chartdiv");
+  }
+
+  drawChart();
+</script>

@@ -1,0 +1,14 @@
+<center>Some fields have been changed.<br>
+  You are becoming the owner of this story.</center>
+<table>
+  <tbody>
+  <tr>
+    <td>Project</td>
+    <td><%= link_to @story.project[:title], {:action => 'show', :controller => 'project', :id => @story.project[:id]} %></td>
+  </tr>
+  <tr>
+    <td>Story</td>
+    <td><%= link_to @story[:id], {:action => 'show', :controller => 'project', :id => @story.project[:id], :story_id => @story[:id]} %></td>
+  </tr>
+  </tbody>
+</table>

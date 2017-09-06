@@ -1,0 +1,5 @@
+$('.update-profile-form').unbind('ajax:success')
+$('.update-profile-form').bind('ajax:success', function() {
+  parent = $(this).parents('#edit_profile');
+  parent.modal('hide');
+})

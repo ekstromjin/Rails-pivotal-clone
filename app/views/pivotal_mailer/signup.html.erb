@@ -1,0 +1,13 @@
+<h1>Welcome to pivotal, <%= @user.email %></h1>
+
+<p>
+  You have successfully signed up to pivotal,your username is:
+  <%= @user.full_name %>.<br>
+</p>
+
+<p>
+  To login to the site, just follow this link:
+  <%= link_to 'Click here to link our team', {:action => 'activate', :controller => 'auth', :activate_key => @user[:activate_key]} %>
+</p>
+
+<p>Thanks for joining and have a great day!</p>

@@ -1,0 +1,8 @@
+$('.project-update-form').unbind('ajax:success');
+$('.project-update-form').bind('ajax:success', function() {
+  $('#stories').html('<%= escape_javascript(render :partial => "stories") %>')
+  $('#members').html('<%= escape_javascript(render :partial => "members") %>')
+  $('#analytics').html('<%= escape_javascript(render partial: 'project/analytics') %>')
+
+  $('#ratings').html('<%= escape_javascript(render partial: 'project/awards') %>')
+});

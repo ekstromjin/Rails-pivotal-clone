@@ -1,0 +1,20 @@
+// Place all the styles related to the story controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.items-header {
+  background-color: #676e7a;
+  border-top: 1px solid grey;
+  overflow: hidden;
+  min-height: 35px;
+  padding: 5px;
+}
+.btn-action {
+  font-size: 12px;
+  padding: 3px 5px;
+}
+.sortable-box-placeholder {
+  background-color: #f5f5f5;
+  border: 1px dashed #DDDDDD !important;
+  border-radius: 10px !important;
+}

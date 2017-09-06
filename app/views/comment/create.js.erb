@@ -1,0 +1,6 @@
+$('.comment-create-form').unbind('ajax:success');
+$('.comment-create-form').bind('ajax:success', function() {
+  var parent = $(this).parents('.comment-block');
+  $(this).find('.comment-comment').val('');
+  parent.find('.story-comments').append('<%= escape_javascript(render partial: 'project/comment', locals: {comment: @comment}) %>');
+})

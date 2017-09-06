@@ -1,0 +1,9 @@
+$('.update-story-title-form').unbind('ajax:success')
+$('.update-story-title-form').bind('ajax:success', function() {
+  var form_action = $(this).find('.form-action')
+  var original_input = $(this).find('.original-value');
+  var items = $(this).parents('.items')
+  form_action.removeClass('edit')
+  original_input.val('<%= @story[:title] %>')
+  items.find('.items-header .story-title').html('<%= @story[:title] %>')
+})

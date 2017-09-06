@@ -1,0 +1,26 @@
+<section class="project">
+  <ul class="settings_area">
+    <li class="actions item">
+      <a class="velocity" title="velocity" data-aid="VelocityIndicator"><span><%= @project.stories(true).length %></span></a>
+      <a class="members" title="1 project members" data-project-id="<%= @project.id %>"><span><%= @project.getMembers.length %></span></a>
+      <span class="story_density_mode control">
+        <a title="Story Density Mode" class="anchor"></a>
+      </span>
+    </li>
+  </ul>
+  <div class="panels">
+    <ul class="items split">
+      <% if session[:isAdmin] %>
+          <li class="item add_story">
+            <a class="" data-toggle="modal" data-target="#addstory">
+              <span class="panel-name">Add Story</span>
+            </a>
+          </li>
+      <% end %>
+
+      <% @panel_options.each do |po| %>
+          <%= render partial: 'project/panelitem', locals: {po: po} %>
+      <% end %>
+    </ul>
+  </div>
+</section>

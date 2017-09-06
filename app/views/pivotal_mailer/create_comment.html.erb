@@ -1,0 +1,21 @@
+<center></center>
+<table>
+  <tbody>
+  <tr>
+    <td>Project</td>
+    <td><%= link_to @story.project[:title], {:action => 'show', :controller => 'project', :id => @story.project[:id]} %></td>
+  </tr>
+  <tr>
+    <td>Story</td>
+    <td><%= link_to @story[:id], {:action => 'show', :controller => 'project', :id => @story.project[:id], :story_id => @story[:id]} %></td>
+  </tr>
+  <tr>
+    <td>Poster</td>
+    <td><%= @comment.user.full_name %></td>
+  </tr>
+  <tr>
+    <td>Comments</td>
+    <td><%= @comment[:comment] %></td>
+  </tr>
+  </tbody>
+</table>

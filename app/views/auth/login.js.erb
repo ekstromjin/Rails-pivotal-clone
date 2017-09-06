@@ -1,0 +1,15 @@
+$('.login-form').unbind('ajax:success')
+$('.login-form').bind('ajax:success', function() {
+  <% if @error_code > 0 %>
+    $(this).find('.remote').show()
+    <% if @error_code == 1 %>
+      $(this).find('.remote .help-text').html('The email is not exist')
+    <% elsif @error_code == 2 %>
+      $(this).find('.remote .help-text').html('The password is not correct')
+    <% elsif @error_code == 3 %>
+      $(this).find('.remote .help-text').html('This user is not activated')
+    <% end %>
+  <% else %>
+  location.href = "<%= root_url %>"
+  <% end %>
+});

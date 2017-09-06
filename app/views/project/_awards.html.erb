@@ -1,0 +1,115 @@
+<% unestimated_stories = @project.stories(true).getUnestimatedStories %>
+<% current_award_story = unestimated_stories.getBeganAwardStory %>
+<% project_members = @project.getMembers %>
+<div class="rating-container">
+  <% if unestimated_stories.present? %>
+    <div class="container" >
+        <div class="col-md-3 sidebar">
+          <ul class="list-unstyled sidebar-menu">
+            <% unestimated_stories.each do |story| %>
+                <li class="sidebar-item sidebar-item-<%= story.id %> <% if story.award_began == 1 %>active<% end %>">
+                  <a class="">
+                    <%= story.title %>
+                    <% if session[:isAdmin] %>
+                        <% if current_award_story.blank? || current_award_story.id != story.id %>
+                            <span class="pull-right start-award <%= current_award_story.blank? ? 'text-warning-600' : 'text-grey' %> " data-storyid="<%= story.id %>"><i class="fa fa-play"></i></span>
+                        <% end %>
+                    <% end %>
+                  </a>
+                </li>
+            <% end %>
+          </ul>
+        </div>
+        <div class="col-md-9 content">
+          <% if current_award_story.blank? %>
+              <center class="empty-stories">
+                <h2 class="help text-grey-300">
+                  Leader didn't start yet...
+                </h2>
+                <span class="loading"></span>
+              </center>
+          <% else %>
+              <h2 class="story-title">
+                <%= link_to current_award_story.title, {:controller => 'project', :action => 'show', :id => @project.id, :story_id => current_award_story.id}, class: 'story-link', target: '_blank' %>
+              </h2>
+              <% if session[:isAdmin] %>
+                  <% if current_award_story.awards.length == project_members.length %>
+                      <div class="average-point">
+                        <div class="points-<%= current_award_story.awards.average(:points).to_i %> point"></div>
+                        <span>is the average</span>
+                      </div>
+                      <div class="estimate-point form-group">
+                        <div class="input-group">
+                          <%= number_field_tag 'points', nil, placeholder: 'Please estimate the point', class: 'form-control', min: 1, max: 8 %>
+                          <span class="input-group-btn">
+                  <a class="btn btn-xs bg-teal legitRipple btn-estimate-points" data-storyid="<%= current_award_story.id %>"> Estimate</a>
+                </span>
+                        </div>
+                        <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i>This field is required.</span>
+                      </div>
+                  <% end %>
+                  <div class="award-members">
+                    <ul class="list-unstyled">
+                      <% project_members.each do |member| %>
+                          <li class="member-item">
+                            <div class="portlet box blue">
+                              <div class="portlet-title">
+                                <% if member.avatar_url.present? %>
+                                    <%= image_tag(asset_path(member.avatar_url), size: '30x30', class: 'avatar-image') %>
+                                <% else %>
+                                    <%= image_tag(asset_path('assets/images/avatar_default.gif'), size: '30x30', class: 'avatar-image')  %>
+                                <% end %>
+                                <%= member.short_name %>
+                              </div>
+                              <div class="portlet-body">
+                                <div class="expect-points">
+                                  <% current_award = current_award_story.awards.find_by_user_id(member.id) %>
+                                  <% if current_award.present? %>
+                                      <div class="points-<%= current_award.points %>"></div>
+                                  <% else %>
+                                      <span class="loading-points"></span>
+                                      <p class="text-center loading-text">Waiting...</p>
+                                  <% end %>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                      <% end %>
+                    </ul>
+                  </div>
+              <% else %>
+                  <% estimate_award = current_award_story.awards.find_by_user_id(session[:user_id]) %>
+                  <ul class="list-unstyled list-inline points-list <%= estimate_award.present? ? '' : 'allow' %>">
+                    <% [1,2,3,4,5,6,7,8].each do |number| %>
+                        <% if estimate_award.present? && estimate_award.points == number %>
+                            <li class="points-item active">
+                        <% else %>
+                            <li class="points-item">
+                        <% end %>
+                        <%= button_tag(data: {:storyid => current_award_story.id, :points => number}, class: "btn evaluate-point point"+number.to_s, type: 'button') do %><div class="points-<%= number %>-small"></div><% end %></li>
+                    <% end %>
+                  </ul>
+              <% end %>
+          <% end %>
+        </div>
+      </div>
+  <% else %>
+    <center class="empty-stories">
+      <h2 class="help text-grey-300">
+        There are none of unestimated stories...
+      </h2>
+      <span class="loading"></span>
+    </center>
+  <% end %>
+</div>
+<script type="text/javascript">
+  temp_award_story = <%= unestimated_stories.length %>;
+  var getproject;
+  <% if current_award_story.present? && session[:isAdmin] && current_award_story.awards.length == project_members.length %>
+    clearTimeout(getproject)
+  <% else %>
+    getproject = setTimeout(function() {
+      $.post('/project/getCurrentProject', {id: <%= @project.id %>});
+    }, 2000);
+  <% end %>
+</script>

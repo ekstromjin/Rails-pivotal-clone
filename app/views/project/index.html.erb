@@ -1,0 +1,82 @@
+<%= render partial: 'layouts/header' %>
+<div class="container index-page">
+  <div class="col-md-offset-2 col-md-8">
+    <div class="main-content">
+      <div style="overflow:hidden">
+        <h2 class="title pull-left">Projects</h2>
+        <% if session[:isAdmin] %>
+            <%= button_tag "Add Project", data: {toggle: 'modal', target: '#addModal'}, class: 'btn btn-info pull-right' %>
+        <% end %>
+      </div>
+      <div class="projects-block">
+        <%= render partial: 'projects' %>
+      </div>
+    </div>
+    <div id="addModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          <%= form_tag({:action => 'create'}, remote: true, class: 'project-create-form', multipart: true) do %>
+            <%= hidden_field_tag 'authenticity_token', value: form_authenticity_token.to_s %>
+            <center class="form-group image-container">
+              <div class="fileupload fileupload-new" data-provides="fileupload">
+                <div class="fileupload-new thumbnail" style="width: 150px; min-height: 150px;">
+                  <%= image_tag(asset_path('assets/images/avatar_default.gif'), size: '150x150') %>
+                </div>
+                <div class="fileupload-preview fileupload-exists thumbnail" style="width: 150px; height: 150px; line-height: 20px;">
+                </div>
+                <div>
+              <span class="btn default btn-file bg-pink">
+                <span class="fileupload-new">
+                  <i class="fa fa-paper-clip"></i> Select image
+                </span>
+                <span class="fileupload-exists">
+                  <i class="fa fa-undo"></i> Change
+                </span>
+                <%= file_field "project", "img_url", class: 'form-control' %>
+              </span>
+                  <a href="#" class="btn red fileupload-exists bg-warning" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Remove</a>
+                </div>
+              </div>
+          </center>
+            <div class="form-group">
+              <%= text_field 'project', 'title', class: 'form-control text-required text-center', placeholder: 'Title' %>
+              <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> Title is empty</span>
+            </div>
+            <div class="form-group">
+              <div class="input-group input-large date-picker input-daterange" data-date="<%= DateTime.now %>" data-date-format="yyyy-mm-dd">
+                <%= text_field 'project', 'startdate', class: 'form-control text-required', placeholder: 'Start Date' %>
+                <span class="input-group-addon">
+                to
+              </span>
+                <%= text_field 'project', 'estimatedenddate', class: 'form-control text-required', placeholder: 'Estimated End Date' %>
+              </div>
+              <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> Startdate or enddate is empty</span>
+            </div>
+            <div class="form-group">
+              <%= select_tag('project[security]', '<option value="0">Public</option><option value="1">Private</option>'.html_safe, :class => 'form-control') %></p>
+            </div>
+            <div class="form-group members">
+              <%= hidden_field 'project', 'members', :class =>'form-control select2', :placeholder => 'Members' %>
+              <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> You should select members</span>
+            </div>
+            <div class="actions">
+              <%= button_tag "Create Project <i class='icon-circle-right2 position-right'></i>".html_safe ,type: 'submit', class: 'btn bg-pink-400 submit' %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var memberData = [];
+  <% @members.each do |member| %>
+  memberData.push({id: <%= member.id %>, text: '<%= member.email %>'})
+  <% end %>
+</script>

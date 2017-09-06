@@ -1,0 +1,116 @@
+<header class="tc_page_header">
+  <ul class="list-unstyled list-inline nav-list">
+    <li class="header-title">
+      <% if @page == 'project-index' %>
+        <a><h3 class="text-white no-m">Pivotal Projects</h3></a>
+      <% elsif @page == 'project-detail' && @project.present? %>
+        <a href="/project/index"><h3 class="text-white no-m"><%= @project.title %>(<% if @project.security == 0 %>Public<% else %>Private<% end %>)</h3></a>
+      <% else %>
+        <a href="/project/index"><h3 class="text-white no-m"><%= @member.full_name %>'s Infomation</h3></a>
+      <% end %>
+    </li>
+    <li class="pull-right">
+      <div class="tc_dropdown">
+        <a class="tc_dropdown_name" data-toggle="dropdown"><%= @user.short_name %></a>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+          <li><a href="#edit_profile" data-toggle="modal">Profile</a></li>
+          <li><%= link_to "Log out", :action => 'logout', :controller => 'auth' %></li>
+        </ul>
+      </div>
+    </li>
+    <li class="pull-right tc_extra_wide">
+      <%= image_tag(asset_path(@user.avatar_url)) %>
+    </li>
+    <% if @page == 'auth-detail' %>
+      <li class="pull-right tc_extra_wide">
+        <%= link_to 'Back', {:action => 'show', :controller => 'project', :id => session[:current_project]} %>
+      </li>
+    <% end %>
+    <% if @page == 'project-index' %>
+        <li class="pull-right">
+          <%= form_tag({:action => 'index'}, method: 'get', remote: true, class: 'search-project-form search_bar') do %>
+              <a class="magnify"></a>
+              <%= text_field_tag "search_string", '', onkeyup:"searchProject()", class: 'search-string', placeholder: 'Search Project', spellcheck: false, autocapitalize: 'off', autocorrect: 'off', autocomplete:'off' %>
+              <a class="anchor search_help"></a>
+          <% end %>
+        </li>
+    <% end %>
+  </ul>
+  <% if @page == 'project-detail' %>
+    <ul class="list-unstyled list-inline tab_link_fields">
+      <li class="active"><a data-toggle="tab" href="#stories">Stories</a></li>
+      <li><a data-toggle="tab" href="#analytics" class="analytics-link">Analytics</a></li>
+      <% if session[:isAdmin] %>
+        <li><a data-toggle="tab" href="#settings">Settings</a></li>
+      <% end %>
+      <li><a data-toggle="tab" href="#members">Members</a></li>
+      <li><a data-toggle="tab" href="#ratings">Rating</a></li>
+    </ul>
+  <% end %>
+</header>
+<div id="edit_profile" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1>Edit Profile</h1>
+      </div>
+      <div class="modal-body">
+        <%= form_tag({:action => 'update', :controller => 'auth'}, :remote => true, :class => 'update-profile-form') do %>
+          <div class="form-group has-feedback has-feedback-left">
+            <%= text_field 'user', 'firstname', class: 'form-control text-required', placeholder: 'First name' %>
+            <div class="form-control-feedback">
+              <i class="icon-user-lock text-muted"></i>
+            </div>
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> Firstname is empty</span>
+          </div>
+          <div class="form-group has-feedback has-feedback-left">
+            <%= text_field 'user', 'lastname', class: 'form-control text-required', placeholder: 'Last name' %>
+            <div class="form-control-feedback">
+              <i class="icon-user-lock text-muted"></i>
+            </div>
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> Lastname is empty</span>
+          </div>
+          <div class="form-group has-feedback has-feedback-left">
+            <%= email_field 'user', 'email', class: 'form-control text-required', placeholder: 'Your email', readonly: true %>
+            <div class="form-control-feedback">
+              <i class="icon-mention text-muted"></i>
+            </div>
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> Email is empty</span>
+          </div>
+          <div class="form-group has-feedback has-feedback-left gender-group" >
+            <%= collection_radio_buttons :user, :gender, [[0, 'Male'], [1, 'Female']], :first, :last, :item_wrapper_class => 'radio_buttons' %>
+          </div>
+          <div class="form-group has-feedback has-feedback-left" >
+            <%= text_field 'user', 'birthdate', class: 'form-control form-control-inline input-medium date-picker text-required',:data => {'date-format' => 'yyyy-mm-dd'}, placeholder: 'Birthdate' %>
+            <div class="form-control-feedback">
+              <i class="icon-mention text-muted"></i>
+            </div>
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> Birthdate is empty</span>
+          </div>
+          <div class="form-group has-feedback has-feedback-left">
+            <%= password_field 'user', 'password_string', class: 'form-control password', placeholder: 'Change password' %>
+            <div class="form-control-feedback">
+              <i class="icon-user-lock text-muted"></i>
+            </div>
+          </div>
+          <div class="form-group has-feedback has-feedback-left">
+            <%= password_field 'user', 'password_confirmation', class: 'form-control password_confirmation', placeholder: 'Password Confirmation' %>
+            <div class="form-control-feedback">
+              <i class="icon-user-check text-muted"></i>
+            </div>
+            <span class="help-block text-danger confirmation"><i class="icon-cancel-circle2 position-left"></i> Password confirmation doesnt match</span>
+          </div>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <%= button_tag "Update Profile <i class='icon-circle-right2 position-right'></i>".html_safe ,type: 'submit', class: 'btn bg-pink-400 submit' %>
+        <%= button_tag "Cancel", type: 'button', class: 'btn btn-default pull-right bg-grey-300', data: {dismiss: "modal"} %>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  var searchProject = function() {
+    $('.search-project-form').submit()
+  }
+</script>

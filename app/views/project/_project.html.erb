@@ -1,0 +1,40 @@
+<div class="project" data-project-id="<%= project.id %>">
+  <div class="inline-block project-image">
+    <% if project.img_url.present? %>
+        <%= image_tag(asset_path(project.img_url)) %>
+    <% else %>
+      <%= image_tag(asset_path('assets/images/avatar_default.gif'))  %>
+    <% end %>
+  </div>
+  <div class="inline-block project-info">
+    <div>
+      <h4 class="project-title inline-block"><%= link_to project.title, {:action=>'show', :controller => 'project',  :id=>project.id}, :class=>'' %>
+        (<% if project.security == 0 %>Public<% else %>Private<% end %>)</h4>
+      <% if project.isProjectDone %>
+          <% @status = 'done' %>
+      <% else %>
+          <% @status = 'processing' %>
+      <% end %>
+      <div class="pull-right">
+        <span class="project-status <%= @status %>">
+          <%= @status %>
+        </span>
+      </div>
+    </div>
+    <ul class="list-inline list-unstyled">
+      <li class="">
+        <label class="text-primary-300"><i class="fa fa-calendar"></i></label>
+        <span>&nbsp;<%= project.startdate %></span>
+      </li>
+      <li>~</li>
+      <li class="">
+        <label class="text-primary-300"><i class="fa fa-calendar"></i></label>
+        <span>&nbsp;<%= project.estimatedenddate %></span>
+      </li>
+      <li>
+        <label class="text-primary-300"><i class="fa fa-user"></i></label>
+        <span><%= project.getMembers.length %></span>
+      </li>
+    </ul>
+  </div>
+</div>

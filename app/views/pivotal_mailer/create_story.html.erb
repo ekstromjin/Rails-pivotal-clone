@@ -1,0 +1,14 @@
+<center>A story has been created and you are the owner of it.<br>
+Here's showing details of story. Please join this story.</center>
+<table>
+  <tbody>
+    <tr>
+      <td>Project</td>
+      <td><%= link_to @story.project[:title], {:action => 'show', :controller => 'project', :id => @story.project[:id]} %></td>
+    </tr>
+    <tr>
+      <td>Story</td>
+      <td><%= link_to @story[:id], {:action => 'show', :controller => 'project', :id => @story.project[:id], :story_id => @story[:id]} %></td>
+    </tr>
+  </tbody>
+</table>

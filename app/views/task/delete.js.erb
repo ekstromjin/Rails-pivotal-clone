@@ -1,0 +1,4 @@
+$('.btn-delete-task').bind('ajax:success', function() {
+  parent = $(this).parents('tr');
+  parent.remove()
+})

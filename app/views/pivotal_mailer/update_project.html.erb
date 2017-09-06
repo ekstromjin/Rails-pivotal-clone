@@ -1,0 +1,9 @@
+<center>This project wants you</center>
+<table>
+  <tbody>
+  <tr>
+    <td>Project</td>
+    <td><%= link_to @project[:title], {:action => 'show', :controller => 'project', :id => @project[:id]} %></td>
+  </tr>
+  </tbody>
+</table>

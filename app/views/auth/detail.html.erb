@@ -1,0 +1,60 @@
+<div class="user-detail">
+  <%= render partial: 'layouts/header' %>
+  <div class="container">
+    <h2 class="text-grey-300">User Profile</h2>
+    <div class="tabbable">
+      <ul class="nav nav-tabs">
+        <li class="active">
+          <a href="#tab-overview" data-toggle="tab">overview</a>
+        </li>
+        <li><a href="#tab-projects" data-toggle="tab">projects</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade active in" id="tab-overview">
+          <div class="member row no-m" data-member-id="<%= @member[:id] %>">
+            <div class="col-md-2 col-sm-3 member-image">
+              <% if @member[:avatar_url].present? %>
+                <%= image_tag(asset_path(@member[:avatar_url]))  %>
+              <% else %>
+                <%= image_tag(asset_path('assets/images/avatar_default.gif'))  %>
+              <% end %>
+            </div>
+            <div class="col-md-10 col-sm-9 member-info">
+              <div class="row no-m">
+                <h4 class="member-name col-md-12"><%= @member.full_name %></h4>
+              </div>
+              <div class="row no-m">
+                <div class="col-sm-12">
+                  <label class="text-primary-300"><i class="fa fa-envelope"></i></label>
+                  <span>&nbsp;<%= @member[:email] %></span>
+                </div>
+              </div>
+              <div class="row no-m">
+                <div class="container-fluid">
+                  <ul class="list-unstyled list-inline">
+                    <li>
+                      <span class="text-primary-300">&nbsp;<%= @member[:gender] == 0 ? '<i class="fa fa-male"></i>'.html_safe : '<i class="fa fa-female"></i>'.html_safe %></span>
+                    </li>
+                    <li>
+                      <label class="text-primary-300"><i class="fa fa-calendar"></i></label>
+                      <span>&nbsp;<%= @member[:birthdate] %></span>
+                    </li>
+                    <li>
+                      <label class="text-primary-300"><i class="fa fa-pagelines"></i></label>
+                      <span>&nbsp;<%= @member.projects.length + Project.public_projects.length %></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="tab-projects">
+          <% @projects.each do |project| %>
+              <%= render partial: 'project', locals: {project: project} %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

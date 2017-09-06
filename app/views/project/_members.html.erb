@@ -1,0 +1,48 @@
+<div class="container members-container">
+  <h2 class="title text-center">
+    Assigned Members
+  </h2>
+  <div class="members-block">
+    <div class="col-sm-offset-2 col-sm-8">
+      <% @project_members = @project.getMembers %>
+      <% @project.getMembers.where.not(id: session[:user_id]).each do |member| %>
+          <div class="member row" data-member-id="<%= member[:id] %>">
+            <div class="col-md-2 col-sm-3 member-image">
+              <% if member.avatar_url.present? %>
+                  <%= image_tag(asset_path(member.avatar_url), size: '100x100') %>
+              <% else %>
+                  <%= image_tag(asset_path('assets/images/avatar_default.gif'))  %>
+              <% end %>
+            </div>
+            <div class="col-md-10 col-sm-9 member-info">
+              <div class="row">
+                <h4 class="member-name col-md-12"><%= link_to member.full_name, {action: 'detail', controller: 'auth', :id => member[:id]} %></h4>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <label class="text-primary-300"><i class="fa fa-envelope"></i></label>
+                  <span>&nbsp;<%= member[:email] %></span>
+                </div>
+              </div>
+              <div class="row no-m">
+                <ul class="list-unstyled list-inline">
+                  <li>
+                    <span class="text-primary-300">&nbsp;<%= member[:gender] == 0 ? '<i class="fa fa-male"></i>'.html_safe : '<i class="fa fa-female"></i>'.html_safe %></span>
+                  </li>
+                  <li>
+                    <label class="text-primary-300"><i class="fa fa-calendar"></i></label>
+                    <span>&nbsp;<%= member[:birthdate] %></span>
+                  </li>
+                  <li>
+                    <label class="text-primary-300"><i class="fa fa-pinterest"></i></label>
+                    <span>&nbsp;<%= member.projects.length + Project.public_projects.length %></span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <hr>
+      <% end %>
+    </div>
+  </div>
+</div>

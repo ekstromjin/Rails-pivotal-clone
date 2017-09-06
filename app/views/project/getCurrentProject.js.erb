@@ -1,0 +1,5 @@
+if (temp_award_story != <%= @project.stories(true).getUnestimatedStories.length %>)
+{
+  $('#stories').html('<%= escape_javascript(render partial: 'project/stories') %>')
+}
+$('#ratings').html('<%= escape_javascript(render partial: 'project/awards') %>')

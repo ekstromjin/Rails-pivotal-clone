@@ -1,0 +1,42 @@
+<div class="page-container">
+  <div class="content-wrapper">
+    <%= form_tag({:action => 'login'}, :remote => true, :class => 'login-form') do %>
+        <div class="panel panel-body">
+          <div class="text-center">
+            <div class="icon-object border-slate-300 text-slate-300"><i class="icon-reading"></i></div>
+            <h5 class="content-group">Login to your account <small class="display-block">Your credentials</small></h5>
+          </div>
+          <div class="remote">
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i><span class="help-text">Email or password is incorrect</span></span>
+          </div>
+          <div class="form-group has-feedback has-feedback-left">
+            <%= email_field 'login', 'email', :class => 'form-control text-required', :placeholder => 'Email address' %>
+            <div class="form-control-feedback">
+              <i class="icon-user text-muted"></i>
+            </div>
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> Email is empty</span>
+          </div>
+          <div class="form-group has-feedback has-feedback-left">
+            <%= password_field 'login', 'password_string', :class => 'form-control text-required', :placeholder => 'Password' %>
+            <div class="form-control-feedback">
+              <i class="icon-lock2 text-muted"></i>
+            </div>
+            <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> Password is empty</span>
+          </div>
+          <div class="form-group">
+            <%= button_tag "Login <i class='icon-arrow-right14 position-right'></i>".html_safe, :class => 'btn bg-pink-400 btn-block submit', :type => 'submit' %>
+          </div>
+          <div class="content-divider text-muted form-group"><span>or sign in with</span></div>
+          <ul class="list-inline form-group list-inline-condensed text-center">
+            <li><a href="#" class="btn border-indigo text-indigo btn-flat btn-icon btn-rounded"><i class="icon-facebook"></i></a></li>
+            <li><a href="#" class="btn border-pink-300 text-pink-300 btn-flat btn-icon btn-rounded"><i class="icon-dribbble3"></i></a></li>
+            <li><a href="#" class="btn border-slate-600 text-slate-600 btn-flat btn-icon btn-rounded"><i class="icon-github"></i></a></li>
+            <li><a href="#" class="btn border-info text-info btn-flat btn-icon btn-rounded"><i class="icon-twitter"></i></a></li>
+          </ul>
+          <div class="content-divider text-muted form-group"><span>Don't have an account?</span></div>
+
+          <%= link_to 'Sign up', {:action => 'signup'}, :class => 'btn btn-default btn-block content-group' %>
+        </div>
+    <% end %>
+  </div>
+</div>

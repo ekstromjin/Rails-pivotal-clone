@@ -1,0 +1,4 @@
+var projects_block = $(".projects-block")
+projects_block.empty()
+projects_block.append('<%= escape_javascript(render partial: "projects") %>');
+

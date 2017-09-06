@@ -1,0 +1,63 @@
+<div class="container settings-container">
+  <div class="col-md-offset-3 col-md-6">
+    <h2 class="title text-center">Project Information</h2>
+    <%= form_tag({:action => 'update', :controller => 'project'}, :remote => true, :class => 'project-update-form') do %>
+      <%= hidden_field 'project', 'id' %>
+      <div class="project-block">
+        <label class="col-md-3 text-right">Title </label>
+        <div class="col-md-9">
+          <%= text_field 'project', 'title', class: 'form-control', readonly: true %>
+        </div>
+      </div>
+      <div class="project-block">
+        <label class="col-md-3 text-right">Start Date </label>
+        <div class="col-md-9">
+          <%= text_field 'project', 'startdate', class: 'form-control', readonly: true %>
+        </div>
+      </div>
+      <div class="project-block">
+        <label class="col-md-3 text-right">End Date </label>
+        <div class="col-md-9">
+          <%= text_field 'project', 'estimatedenddate', class: 'form-control date-picker text-required', data: {'date-format' => 'yyyy-mm-dd', 'date-start-date' => @project.startdate}, placeholder: 'End date', readonly: session[:isAdmin] == true ? false : true %>
+        </div>
+        <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> Birthdate is empty</span>
+      </div>
+      <div class="project-block">
+        <label class="col-md-3 text-right">Security </label>
+        <div class="col-md-9">
+          <%= select_tag('project[security]', options_for_select([['public', 0], ['private', 1]], @project[:security]), :class => 'form-control', disabled: session[:isAdmin] == true ? false : true) %></p>
+        </div>
+      </div>
+      <div class="project-block project-members-block <% if @project[:security] == 1 %>security-private<% end %>">
+        <label class="col-md-3 text-right">Members</label>
+        <div class="col-md-9">
+          <% if session[:isAdmin] %>
+            <%= hidden_field 'project', 'members', :class =>'form-control select2 project-members', :placeholder => 'None', :value => @project.getMemberIds.join(',') %>
+          <% else %>
+            <%= text_field 'project', 'members', class: 'form-control', value: @project.getMemberNames, readonly: true %>
+          <% end %>
+        </div>
+        <span class="help-block text-danger require"><i class="icon-cancel-circle2 position-left"></i> More than one member is required.</span>
+      </div>
+      <% if session[:isAdmin] %>
+        <div class="form-action col-md-offset-3">
+          <%= button_tag "Update Project <i class='icon-circle-right2 position-right'></i>".html_safe, class: 'btn bg-pink-400 submit' %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  var memberData = [];
+  <% User.getMembers.each do |user| %>
+    memberData.push({id: <%= user[:id] %>, text: '<%= user.short_name %>'})
+  <% end %>
+  var handleProjectSelect2 = function() {
+    $('.project-members').select2({
+      data: memberData,
+      multiple: true
+    })
+  }
+  handleProjectSelect2()
+</script>

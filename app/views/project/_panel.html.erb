@@ -1,0 +1,35 @@
+<% @panel = po["panel_type"] %>
+<div class="panel <%= po["panel_type"] %> <%= po["is_visible"] == true ? 'visible': '' %>" data-type="<%= po["panel_type"] %>">
+  <div class="header">
+    <button class="close">×</button>
+    <h6 class="header-title"><%= po["panel_type"].gsub('_', ' ') %></h6>
+    <div class="tc_dropdown">
+      <a class="tc_dropdown_name" data-toggle="dropdown">
+        <span class="fa fa-ellipsis-v hold-span"></span>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        <li><a class="expand-all">Expand all iterations</a></li>
+        <li><a class="collapse-all">Collapse all iterations</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="items-container" data-scrollable="true">
+    <%
+      if po["panel_type"] == 'my_work'
+        @selected_stories = @project.getMyworkStories(session)
+      elsif po["panel_type"] == 'current'
+        @selected_stories = @project.getCurrentStories(session)
+      elsif po["panel_type"] == 'backlog'
+        @selected_stories = @project.getBacklogStories
+      elsif po["panel_type"] == 'test'
+        @selected_stories = @project.getTestStories
+      elsif po["panel_type"] == 'done'
+        @selected_stories = @project.getDoneStories
+      end
+    %>
+
+    <% @selected_stories.each do |story| %>
+    <%= render :partial => 'project/story', :locals => {story: story} %>
+    <% end %>
+  </div>
+</div>

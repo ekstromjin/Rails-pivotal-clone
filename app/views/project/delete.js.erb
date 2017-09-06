@@ -1,0 +1,5 @@
+$('.project-delete').unbind('ajax:success')
+$('.project-delete').bind('ajax:success', function() {
+  var parent = $(this).parent();
+  parent.fadeOut();
+});

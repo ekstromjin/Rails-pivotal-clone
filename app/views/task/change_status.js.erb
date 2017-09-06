@@ -1,0 +1,7 @@
+<% @story = @task.story %>
+var story_item = $('#story-<%= @story[:id] %>');
+<% if @story.isTasksComplete && @story[:status] == 1 %>
+  story_item.find('.story_action').append('<%= link_to 'Finish', {action: 'change_status', :controller => 'story', status: 2, id: @story.id, project_id: @story.project.id}, method: 'post', remote: true, class: 'btn btn-default btn-action' %>')
+<% elsif !@story.isTasksComplete && @story[:status] == 1 %>
+  story_item.find('.story_action').empty()
+<% end %>

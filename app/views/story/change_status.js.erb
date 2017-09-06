@@ -1,0 +1,35 @@
+$('.btn-action').unbind('ajax:success')
+$('.btn-action').bind('ajax:success', function() {
+  var parent = $(this).parent();
+  var items_parent = $(this).parents('.items');
+  var before_panel = $(this).parents('.panel').data('type');
+  var story_status = <%= @story[:status] %>;
+
+  var panel_name = '';
+  <% if @story[:status] == 1 %>
+    panel_name = 'my_work'
+  <% elsif @story[:status] == 2 %>
+    panel_name = 'test'
+  <% elsif @story[:status] == 3 %>
+    panel_name = 'backlog'
+  <% elsif @story[:status] == 4 %>
+    panel_name = 'done'
+  <% end %>
+
+  if (story_status == 1 && before_panel == "my_work") {
+    $(this).remove();
+    <% if @story.isTasksComplete %>
+      parent.append('<%= link_to 'Finish', {action: 'change_status', :controller => 'story', status: 2, id: @story.id, project_id: @project.id}, method: 'post', remote: true, class: 'btn btn-default btn-action' %>');
+    <% end %>
+  }
+  else {
+    items_parent.remove();
+    $('.panel.' + panel_name + ' .items-container').append('<%= escape_javascript(render :partial => "project/story", :locals => {story: @story}) %>')
+  }
+
+  $('.sidebar-content').html('<%= escape_javascript(render partial: 'project/sidebar') %>')
+  $('#analytics').html('<%= escape_javascript(render partial: 'project/analytics') %>')
+
+  handleStorySelect2()
+  $('#analytics').html('<%= escape_javascript(render partial: 'project/analytics') %>')
+})
